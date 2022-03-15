@@ -14,10 +14,16 @@ class Myapp extends StatelessWidget {
         ),
         body: Container(
           color: Colors.red,
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.fromLTRB(25, 45, 25, 45),
+          padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
           child: Container(
-            color: Colors.lightBlue,
             margin: EdgeInsets.all(30),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.greenAccent, Colors.blue])),
           ),
         ),
       ),
