@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_application_1/Main_menu.dart';
-// import 'package:google_fonts/google_fonts.dart';
-
 void main() {
   runApp(MyApp());
 }
@@ -117,8 +114,9 @@ class ChatItem extends StatelessWidget {
         isi,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontFamily: "AdventPro"),
       ),
-      title: Text(nama, style: TextStyle(fontWeight: FontWeight.bold)),
+      title: Text(nama, style: TextStyle(fontFamily: "Lobster", fontSize: 19)),
       trailing: Text("13.00"),
     );
   }
