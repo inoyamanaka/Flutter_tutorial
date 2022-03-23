@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/part1.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,8 +23,13 @@ class Myform extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Container(
+        width: 500,
+        height: 500,
+        child: SvgPicture.asset("images/moon.svg"),
+      ),
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: TextField(
           autocorrect: false,
 
@@ -36,7 +42,7 @@ class Myform extends StatelessWidget {
         ),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: TextField(
           obscureText: true,
           decoration: InputDecoration(
