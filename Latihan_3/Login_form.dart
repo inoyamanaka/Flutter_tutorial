@@ -12,7 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(appBar: AppBar(title: Text("Text")), body: Myform()),
+      home: Scaffold(
+          backgroundColor: Color.fromRGBO(46, 46, 66, 1),
+          appBar: AppBar(title: Text("Text")),
+          body: Myform()),
     );
   }
 }
@@ -24,32 +27,80 @@ class Myform extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Container(
-        width: 500,
-        height: 500,
-        child: SvgPicture.asset("images/moon.svg"),
+        width: 300,
+        height: 200,
+        child: SvgPicture.asset("images/mobile.svg"),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
         child: TextField(
           autocorrect: false,
-
-          // obscureText: true,
+          style: TextStyle(color: Color.fromRGBO(245, 0, 87, 1)),
           decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Username',
-            prefixIcon: Icon(Icons.account_circle_rounded),
-          ),
+              border: OutlineInputBorder(),
+
+              // TEXT DECORATION
+              labelText: 'Username',
+              labelStyle: TextStyle(
+                fontSize: 20,
+                color: Color.fromRGBO(245, 0, 87, 1),
+              ),
+
+              // PREFIX ICON
+              prefixIcon: Icon(Icons.account_circle_rounded,
+                  color: Color.fromRGBO(245, 0, 87, 1)),
+              suffixIcon: Icon(Icons.remove_red_eye_outlined,
+                  color: Color.fromRGBO(245, 0, 87, 1)),
+
+              // KETIKA FORM TIDAK DIGUNAKAN
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(0),
+                  borderSide: BorderSide(
+                    color: Color.fromRGBO(245, 0, 87, 1),
+                  )),
+
+              // KETIKA FORM DIKLIK
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(
+                    color: Color.fromRGBO(245, 0, 87, 1),
+                  ))),
         ),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
         child: TextField(
           obscureText: true,
+          style: TextStyle(color: Color.fromRGBO(245, 0, 87, 1)),
           decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Password',
-            prefixIcon: Icon(Icons.lock),
-          ),
+              border: OutlineInputBorder(),
+
+              // TEXT DECORATION
+              labelText: 'Password',
+              labelStyle: TextStyle(
+                fontSize: 20,
+                color: Color.fromRGBO(245, 0, 87, 1),
+              ),
+
+              // PREFIX ICON
+              prefixIcon:
+                  Icon(Icons.lock, color: Color.fromRGBO(245, 0, 87, 1)),
+              suffixIcon: Icon(Icons.remove_red_eye_outlined,
+                  color: Color.fromRGBO(245, 0, 87, 1)),
+
+              // KETIKA FORM TIDAK DIGUNAKAN
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(0),
+                  borderSide: BorderSide(
+                    color: Color.fromRGBO(245, 0, 87, 1),
+                  )),
+
+              // KETIKA FORM DIKLIK
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(
+                    color: Color.fromRGBO(245, 0, 87, 1),
+                  ))),
         ),
       ),
     ]);
