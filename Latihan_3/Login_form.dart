@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/part1.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
@@ -12,16 +11,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-          backgroundColor: Color.fromRGBO(46, 46, 66, 1),
-          appBar: AppBar(title: Text("Text")),
-          body: Myform()),
+      debugShowCheckedModeBanner: false,
+      home: SafeArea(
+        child: Scaffold(
+            backgroundColor: Color.fromRGBO(46, 46, 66, 1), body: Myform()),
+      ),
     );
   }
 }
 
-class Myform extends StatelessWidget {
+class Myform extends StatefulWidget {
+  @override
+  State<Myform> createState() => _MyformState();
+}
+
+class _MyformState extends State<Myform> {
   // const Myform({ Key? key }) : super(key: key);
+  final TextEditingController username = TextEditingController();
+
+  final TextEditingController password = TextEditingController();
+
+  String hasil = "LOGIN";
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +41,27 @@ class Myform extends StatelessWidget {
         height: 200,
         child: SvgPicture.asset("images/mobile.svg"),
       ),
+      Container(
+        margin: EdgeInsets.symmetric(vertical: 5),
+        child: Text(
+          hasil,
+          style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Color.fromRGBO(245, 0, 87, 1)),
+        ),
+      ),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
         child: TextField(
           autocorrect: false,
+          controller: username,
+          onSubmitted: (value) {
+            setState(() {
+              hasil = value;
+            });
+            print(value);
+          },
           style: TextStyle(color: Color.fromRGBO(245, 0, 87, 1)),
           decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -71,6 +98,13 @@ class Myform extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
         child: TextField(
           obscureText: true,
+          controller: password,
+          // onChanged: (value) {
+          //   print(value);
+          // },
+          onSubmitted: (value) {
+            print(value);
+          },
           style: TextStyle(color: Color.fromRGBO(245, 0, 87, 1)),
           decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -101,6 +135,22 @@ class Myform extends StatelessWidget {
                   borderSide: BorderSide(
                     color: Color.fromRGBO(245, 0, 87, 1),
                   ))),
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.only(left: 185),
+        width: 110,
+        height: 40,
+        child: ElevatedButton(
+          onPressed: () {
+            // Tempat taruh logicnya
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(
+              Color.fromRGBO(245, 0, 87, 1),
+            ),
+          ),
+          child: const Text('Submit'),
         ),
       ),
     ]);
