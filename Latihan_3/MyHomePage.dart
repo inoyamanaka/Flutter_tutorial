@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'part2.dart';
+import 'MyChat.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MyHomePage extends StatelessWidget {
