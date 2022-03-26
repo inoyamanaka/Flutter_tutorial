@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
+// import 'dart:async';
+
+// Membuat class Myapp yg merupakan turunan dari kelas StatelessWidget
+// cukup ketikan stl
 class MenuChat extends StatelessWidget {
+  static const nameRoute = '/chat';
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: MyHomeChat());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MyHomeChat(),
+    );
   }
 }
 
 class MyHomeChat extends StatelessWidget {
-  const MyHomeChat({
-    Key key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> MyUser = [
@@ -67,7 +72,7 @@ class MyHomeChat extends StatelessWidget {
       }
     ];
     return Scaffold(
-      backgroundColor: Color.fromRGBO(123, 220, 181, 1),
+      backgroundColor: Color.fromRGBO(245, 0, 87, 1),
       appBar: AppBar(
         title: Center(
             child: Text(
@@ -78,10 +83,21 @@ class MyHomeChat extends StatelessWidget {
               fontWeight: FontWeight.bold),
         )),
       ),
+      drawer: Drawer(
+        backgroundColor: Color.fromRGBO(46, 46, 66, 1),
+        child: Column(children: [
+          Container(
+            color: Color.fromRGBO(245, 0, 87, 1),
+            width: double.infinity,
+            height: 150,
+            child: Text("Menu Pilihan"),
+          )
+        ]),
+      ),
       body: ListView(
           children: MyUser.map((data) {
         return Dismissible(
-          key: Key("1"),
+          key: Key(data.toString()),
           direction: DismissDirection.endToStart,
           background: Container(
             color: Colors.red,
@@ -93,7 +109,7 @@ class MyHomeChat extends StatelessWidget {
             padding: EdgeInsets.only(right: 20),
           ),
           child: Card(
-            color: Colors.grey[850],
+            color: Color.fromRGBO(46, 46, 66, 1),
             child: ChatItem(
               nama: data['nama'],
               Urlimg: data['img'],
