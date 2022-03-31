@@ -1,51 +1,43 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
-import '../screens/product_detail_screen.dart';
+import '../models/product.dart';
+import '../widgets/product_item.dart';
 
-class ProductItem extends StatelessWidget {
-  final String id;
-  final String title;
-  final String imageUrl;
-
-  ProductItem(this.id, this.title, this.imageUrl);
+class ProductsOverviewScreen extends StatelessWidget {
+  final List<Product> loadproduct = List.generate(
+    24,
+    (index) {
+      return Product(
+        id: "id_${index + 1}",
+        title: "Product ${index + 1}",
+        description: 'Ini adalah deskripsi produk ${index + 1}',
+        price: 10 + Random().nextInt(100).toDouble(),
+        imageUrl: 'https://picsum.photos/id/$index/200/300',
+      );
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: GridTile(
-        child: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              "product-detail",
-              arguments: id,
-            );
-          },
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-          ),
-        ),
-        footer: GridTileBar(
-          backgroundColor: Colors.black87,
-          leading: IconButton(
-            icon: Icon(Icons.favorite_border_outlined),
-            color: Theme.of(context).colorScheme.secondary,
-            onPressed: () {},
-          ),
-          title: Text(
-            title,
-            textAlign: TextAlign.center,
-          ),
-          trailing: IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-            ),
-            onPressed: () {},
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Soppe"),
       ),
+      body: GridView.builder(
+          padding: const EdgeInsets.all(10.0),
+          itemCount: loadproduct.length,
+          itemBuilder: (ctx, index) => ProductItem(
+                loadproduct[index].id,
+                loadproduct[index].title,
+                loadproduct[index].imageUrl,
+              ),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1 / 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          )),
     );
   }
 }
