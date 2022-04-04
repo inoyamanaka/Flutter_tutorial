@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/product_detail_screen.dart';
+import 'package:provider/provider.dart';
+import '../providers/product.dart';
 
 class ProductItems extends StatelessWidget {
-  final String id;
-  final String title;
-  final String description;
-  final String price;
-  final String ImgUrl;
-
-  const ProductItems(
-      this.id, this.title, this.description, this.price, this.ImgUrl);
-
   @override
   Widget build(BuildContext context) {
+    final items = Provider.of<Product>(context);
     return Scaffold(
       body: GridTile(
           child: ClipRRect(
@@ -21,25 +14,33 @@ class ProductItems extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, 'product-detail',
-                    arguments: this.id);
+                    arguments: items.id);
               },
               child: Image.network(
-                this.ImgUrl,
+                items.UrlImg,
                 fit: BoxFit.cover,
               ),
             ),
           ),
           footer: GridTileBar(
+            trailing: Consumer<Product>(
+              builder: (context, state_favorite, _) => IconButton(
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(),
+                alignment: Alignment.centerRight,
+                color: Colors.red,
+                icon: state_favorite.icon,
+                onPressed: () {
+                  state_favorite.setFavorite();
+                },
+              ),
+            ),
             leading: Icon(
-              Icons.shop_rounded,
+              Icons.shopping_cart_checkout_outlined,
               color: Colors.green,
             ),
-            trailing: Icon(
-              Icons.favorite,
-              color: Colors.pink,
-            ),
             title: Text(
-              this.title,
+              items.title,
               textAlign: TextAlign.center,
             ),
             backgroundColor: Colors.black87,
