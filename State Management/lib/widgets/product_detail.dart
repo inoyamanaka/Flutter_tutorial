@@ -1,12 +1,17 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/all_product.dart';
+import '../providers/cart.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productId = ModalRoute.of(context)?.settings.arguments as String;
     final product = Provider.of<Products>(context).findById(productId);
+    final cart = Provider.of<Cart>(context);
+
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       body: Card(
@@ -33,7 +38,7 @@ class ProductDetailScreen extends StatelessWidget {
                 padding: EdgeInsets.all(10),
                 alignment: Alignment.topLeft,
                 child: Text(
-                  "${product.title}",
+                  product.title,
                   style: TextStyle(
                       fontFamily: "HappyMonkey",
                       color: Colors.black,
@@ -48,7 +53,7 @@ class ProductDetailScreen extends StatelessWidget {
                 padding: EdgeInsets.all(10),
                 alignment: Alignment.topRight,
                 child: Text(
-                  product.price,
+                  "\$ ${product.price}",
                   style: TextStyle(
                       fontFamily: "HappyMonkey",
                       color: Colors.black,
@@ -93,7 +98,13 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
                 child: IconButton(
                   icon: Icon(Icons.shopping_cart),
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Berhasil ditambahkan"),
+                      duration: Duration(milliseconds: 500),
+                    ));
+                    cart.AddCart(product.id, product.title, product.price);
+                  },
                 ),
               )
             ],
@@ -104,4 +115,3 @@ class ProductDetailScreen extends StatelessWidget {
   }
 }
 
-class TextAlignt {}
