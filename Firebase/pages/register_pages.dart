@@ -13,6 +13,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final datas = Provider.of<HttpProviderPost>(context, listen: false);
+    // final datas = Provider.of<HttpProviderPost>(context, listen: false);
     return SafeArea(
       child: Scaffold(
           // resizeToAvoidBottomInset: false,
@@ -82,6 +83,15 @@ class RegisterPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30.0)),
                     ),
                     onEditingComplete: () {
+                      datas.PostData(username.text, password.text)
+                          .then((response) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Berhasil ditambahkan"),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      });
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text("Berhasil ditambahkan"),
@@ -94,50 +104,47 @@ class RegisterPage extends StatelessWidget {
 
               // Submit Button
               SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  datas.PostData(
-                          // username.text,
-                          // password.text,
-                          "",
-                          "")
-                      .then((response) {
+              Consumer<HttpProviderPost>(
+                builder: (context, value, child) => ElevatedButton(
+                  onPressed: () {
+                    datas.initialData();
+                    datas.data.forEach((u) {
+                      if ((u.name).toString() == username.text &&
+                          (u.password).toString() == password.text) {
+                        Navigator.of(context).pushNamed('daftar');
+                      }
+                    });
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                          "Berhasil Menambahkan",
-                          textAlign: TextAlign.center,
-                        ),
-                        duration: Duration(milliseconds: 700),
+                        content: Text("Coba lagi Mas "),
+                        duration: Duration(seconds: 2),
                       ),
                     );
-                  });
-
-                  Navigator.of(context).pushNamed('daftar');
-                },
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(0),
-                    shadowColor: Colors.black87,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20))),
-                child: Ink(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color.fromRGBO(254, 198, 129, 1),
-                          Color.fromRGBO(249, 161, 135, 1)
-                        ],
+                  },
+                  style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(0),
+                      shadowColor: Colors.black87,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20))),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color.fromRGBO(254, 198, 129, 1),
+                            Color.fromRGBO(249, 161, 135, 1)
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Container(
+                      width: 250,
+                      height: 50,
+                      alignment: Alignment.center,
+                      child: const Text(
+                        'Submit',
+                        style: const TextStyle(fontSize: 18),
                       ),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Container(
-                    width: 250,
-                    height: 50,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'Submit',
-                      style: const TextStyle(fontSize: 18),
                     ),
                   ),
                 ),
