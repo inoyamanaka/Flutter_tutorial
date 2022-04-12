@@ -81,9 +81,9 @@ class Players with ChangeNotifier {
         .then((response) {
       Player selectPlayer =
           _allPlayer.firstWhere((element) => element.id == id);
-      // selectPlayer.name = name;
-      // selectPlayer.position = position;
-      // selectPlayer.imageUrl = image;
+      selectPlayer.name = name;
+      selectPlayer.position = position;
+      selectPlayer.imageUrl = image;
       print(selectPlayer.name);
       notifyListeners();
     });
