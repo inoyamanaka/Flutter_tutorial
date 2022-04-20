@@ -15,14 +15,13 @@ class Myapp extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                // Membuat widget Text
+         
                 Text('Nama :'),
                 Text('Herlambang Kurniawan'),
               ],
             ),
             Row(
               children: <Widget>[
-                // Membuat widget Text
                 Text('Alamat :'),
                 Text('Jl. Musktika 3 no.126A'),
               ],
