@@ -27,7 +27,6 @@ class Myapp extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                // Membuat widget Text
                 Text('Kota :'),
                 Text('Blora'),
               ],
