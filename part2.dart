@@ -15,7 +15,6 @@ class Myapp extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-         
                 Text('Nama :'),
                 Text('Herlambang Kurniawan'),
               ],
@@ -35,7 +34,6 @@ class Myapp extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                // Membuat widget Text
                 Text('Kode Pos :'),
                 Text('58212'),
               ],
