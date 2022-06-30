@@ -1,5 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -13,9 +19,29 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late FlutterLocalNotificationsPlugin fltrNotification;
+  StatBar scan = new StatBar();
+  String text_persen = "0";
+  late Timer timer;
+  final _database = FirebaseDatabase.instance.reference();
+
   @override
   void initState() {
     super.initState();
+    _activateListener();
+
+    WidgetsBinding.instance?.addPostFrameCallback((timestamp) async {
+      final stat = Provider.of<StatBar>(context, listen: false);
+      // stat.rep();
+      stat.state_on_off();
+      stat.activateListener();
+
+      stat.bar();
+
+      timer = Timer.periodic(Duration(seconds: 1), (_) {
+        stat.time_show();
+      });
+    });
+
     var androidInitilize =
         new AndroidInitializationSettings('ic_flutternotification');
     var iOSinitilize = new IOSInitializationSettings();
@@ -26,7 +52,28 @@ class _HomeState extends State<Home> {
         onSelectNotification: notificationSelected);
   }
 
-  Future _showNotification() async {
+  @override
+  Future<void> didChangeDependencies() async {
+    WidgetsBinding.instance?.addPostFrameCallback((timestamp) async {
+      final stat = Provider.of<StatBar>(context, listen: false);
+    });
+
+    super.didChangeDependencies();
+  }
+
+  void _activateListener() {
+    _database.child("data").child("height").onValue.listen((event) {
+      final int persen = event.snapshot.value;
+      setState(() {
+        text_persen = persen.toString();
+        if (persen >= 100) {
+          showNotification();
+        }
+      });
+    });
+  }
+
+  Future showNotification() async {
     var androidDetails = new AndroidNotificationDetails(
         "Channel ID", "Desi programmer",
         channelDescription: "This is my channel", importance: Importance.max);
@@ -42,163 +89,157 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final stat = Provider.of<StatBar>(context, listen: false);
+    final state_nf = _database.child('data');
 
-    DateTime dateToday = new DateTime.now();
-    String date = dateToday.toString().substring(0, 10);
+    DateFormat formattedDate = new DateFormat.yMMMMd('en_US');
+    String day = formattedDate.format(DateTime.now());
 
     double width_device = (MediaQuery.of(context).size.width);
 
-    return Stack(children: [
+    return Column(children: <Widget>[
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 0),
+      ),
       Column(
         children: [
           ClipPath(
               clipper: CustomClipPath(),
               child: Container(
-                height: 120,
+                height: 50,
                 width: width_device,
                 color: Color.fromRGBO(58, 148, 248, 1),
               )),
         ],
       ),
-      Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              child: Stack(children: [
-                Consumer<StatBar>(
-                  builder: (context, value, child) => Container(
-                    height: Size.infinite.height,
-                    width: width_device * 0.5,
-                    child: SizedBox(
-                      child: OverflowBox(
-                        alignment: Alignment.center,
-                        minWidth: 330,
-                        maxWidth: 330,
-                        child: Lottie.asset(
-                          "assets/water_tank.json",
-                          repeat: value.repeat,
-                          animate: value.animasi,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Consumer<StatBar>(
-                  builder: (context, value, child) => Center(
-                    child: Container(
-                      padding: EdgeInsets.only(left: width_device / 6.6),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "${value.jumlah}%",
-                        style: TextStyle(
-                            fontSize: 30,
-                            fontFamily: "Averta",
-                            color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                )
-              ]),
+      Consumer<StatBar>(
+        builder: (context, value, child) => Text(
+          "${value.date_jam}",
+          style: TextStyle(fontFamily: "Koulen", fontSize: 35),
+        ),
+      ),
+      Text(
+        "${day}",
+        style: TextStyle(fontFamily: "Koulen", fontSize: 15),
+      ),
+      Stack(
+        alignment: AlignmentDirectional.center,
+        // height: 450,
+        children: [
+          Consumer<StatBar>(
+            builder: (context, value, child) => Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(0),
+              width: (MediaQuery.of(context).size.width) - 25,
+              child: Lottie.asset(
+                "assets/water_tank.json",
+                // fit: BoxFit.cover,
+                repeat: value.repeat,
+                animate: value.animasi,
+              ),
             ),
-            Container(
-                height: Size.infinite.height,
-                width: width_device * 0.5,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 70),
-                      // Container(
-                      //   width: 160,
-                      //   height: 70,
-                      //   decoration: BoxDecoration(
-                      //       color: Color.fromRGBO(219, 219, 219, 1),
-                      //       borderRadius: BorderRadius.circular(10)),
-                      //   child: ListTile(
-                      //       title: Text(
-                      //         "Waktu",
-                      //         style: TextStyle(fontFamily: "Averta"),
-                      //       ),
-                      //       subtitle: Text(
-                      //         date.toString(),
-                      //         style: TextStyle(fontSize: 12),
-                      //       ),
-                      //       trailing: Icon(
-                      //         Icons.timer,
-                      //         color: Colors.orange,
-                      //       )),
-                      // ),
-                      SizedBox(height: 10),
-                      // Container(
-                      //   width: 160,
-                      //   height: 70,
-                      //   decoration: BoxDecoration(
-                      //       color: Color.fromRGBO(219, 219, 219, 1),
-                      //       borderRadius: BorderRadius.circular(10)),
-                      //   child: ListTile(
-                      //     title: Text(
-                      //       "Estimasi",
-                      //       style: TextStyle(fontFamily: "Averta"),
-                      //     ),
-                      //     subtitle: Text(
-                      //       "-",
-                      //       style: TextStyle(fontSize: 12),
-                      //     ),
-                      //     trailing: Icon(
-                      //       Icons.battery_charging_full_rounded,
-                      //       color: Colors.green,
-                      //     ),
-                      //   ),
-                      // ),
-                      SizedBox(height: 10),
-                      // Consumer<StatBar>(
-                      //   builder: (context, value, child) => ElevatedButton(
-                      //     style: ButtonStyle(
-                      //       padding: MaterialStateProperty.all<EdgeInsets>(
-                      //           EdgeInsets.symmetric(horizontal: 40)),
-                      //       backgroundColor:
-                      //           MaterialStateProperty.all<Color>(stat.color),
-                      //     ),
-                      //     child: Text(stat.aktif),
-                      //     onPressed: () async {
-                      //       stat.changeButton();
-                      //       if (value.nyala == true) {
-                      //         await value.percent();
-                      //         if (value.jumlah >= 100) {
-                      //           _showNotification();
-                      //         }
-                      //       }
-                      //     },
-                      //   ),
-                      // ),
-                      // Consumer<StatBar>(
-                      //   builder: (context, value, child) => ElevatedButton(
-                      //     style: ButtonStyle(
-                      //       padding: MaterialStateProperty.all<EdgeInsets>(
-                      //           EdgeInsets.symmetric(horizontal: 55)),
-                      //       backgroundColor:
-                      //           MaterialStateProperty.all<Color>(Colors.blue),
-                      //     ),
-                      //     child: Text("Scan"),
-                      //     onPressed: () {
-                      //       if (value.nyala == false) {
-                      //         value.bar();
-                      //       } else if (value.nyala == false) {}
-                      //     },
-                      //   ),
-                      // ),
-                    ])),
-          ]),
+          ),
+          Consumer<StatBar>(
+            builder: (context, value, child) => Positioned(
+              child: Container(
+                child: Text(
+                  ("${value.jumlah}%"),
+                  style: TextStyle(
+                      fontSize: 30, fontFamily: "Averta", color: Colors.white),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+      Row(
+        children: [
+          // Estimasi Waktu
+          Container(
+            width: 160,
+            height: 70,
+            margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+            decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Color.fromRGBO(219, 219, 219, 1),
+                  borderRadius: BorderRadius.circular(10)),
+              child: ListTile(
+                title: Text(
+                  "Kecepatan",
+                  style: TextStyle(fontFamily: "Averta", fontSize: 14),
+                ),
+                subtitle: Text(
+                  "-",
+                  style: TextStyle(fontSize: 12),
+                ),
+                trailing: Icon(
+                  Icons.speed,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ),
+
+          // Debit Air
+          Container(
+            width: 140,
+            height: 70,
+            margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+            decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Color.fromRGBO(219, 219, 219, 1),
+                  borderRadius: BorderRadius.circular(10)),
+              child: ListTile(
+                title: Text(
+                  "Estimasi",
+                  style: TextStyle(fontFamily: "Averta", fontSize: 14),
+                ),
+                subtitle: Text(
+                  "-",
+                  style: TextStyle(fontSize: 10),
+                ),
+                trailing: Icon(
+                  Icons.timer,
+                  color: Colors.orangeAccent,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+      Consumer<StatBar>(
+        builder: (context, value, child) => ElevatedButton(
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsets>(
+                EdgeInsets.symmetric(horizontal: 30)),
+            backgroundColor: MaterialStateProperty.all<Color>(stat.color),
+          ),
+          child: Text(stat.aktif),
+          onPressed: () async {
+            if (value.nyala == true) {
+              state_nf.update({'status': 0});
+              value.bar();
+              if (value.jumlah >= 100) {
+                showNotification();
+              }
+            } else if (value.nyala == false) {
+              state_nf.update({'status': 1});
+              stat.rep();
+            }
+          },
+        ),
+      ),
     ]);
   }
 
-  Future notificationSelected(String? payload) async {
-    // showDialog(
-    //   context: context,
-    //   builder: (context) => AlertDialog(
-    //     content: Text("S"),
-    //   ),
-    // );
-  }
+  Future notificationSelected(String? payload) async {}
 }
