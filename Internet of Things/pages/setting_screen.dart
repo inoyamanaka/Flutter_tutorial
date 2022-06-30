@@ -9,7 +9,7 @@ class SettingPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Setting(),
-        bottomNavigationBar: BottomNavBar(indx: 1),
+        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }
