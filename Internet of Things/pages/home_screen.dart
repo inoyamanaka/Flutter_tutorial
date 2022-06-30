@@ -8,7 +8,7 @@ class HomePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Home(),
-        bottomNavigationBar: BottomNavBar(indx: 0),
+        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }
